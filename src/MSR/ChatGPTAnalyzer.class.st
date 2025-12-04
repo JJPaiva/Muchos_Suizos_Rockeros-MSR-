@@ -1,15 +1,17 @@
 Class {
-	#name : #ChatGPTAnalyzer,
-	#superclass : #Object,
+	#name : 'ChatGPTAnalyzer',
+	#superclass : 'Object',
 	#instVars : [
 		'jsonData',
 		'repoTokensData',
 		'repoData'
 	],
-	#category : #'MSR-Model'
+	#category : 'MSR-Model',
+	#package : 'MSR',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ChatGPTAnalyzer >> analyzeFromJsonFile: fileName [
 	| jsonFile parsedJson conversations repos |
 
@@ -80,7 +82,75 @@ ChatGPTAnalyzer >> analyzeFromJsonFile: fileName [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
+ChatGPTAnalyzer >> gtBoxesSimpleFor: aView [
+    <gtView>
+    | data mainContainer rawA rawP width height box zoomable modelRaw modelStr color |
+
+    "Obtener datos"
+    data := self jsonData.
+    (data isNil or: [ data isEmpty ]) ifTrue: [
+        ^ aView text
+            title: 'Boxes (zoom)';
+            display: 'No hay datos.' ].
+
+    "Contenedor principal"
+    mainContainer := BlElement new.
+    mainContainer layout: BlFlowLayout new.
+    mainContainer size: 8000 @ 22000.
+
+    "Crear cajas con color según Model (robusto a variantes)"
+    data do: [ :each |
+        rawA := (each includesKey: #Answer) ifTrue: [ each at: #Answer ] ifFalse: [ each at: 'Answer' ifAbsent: [''] ].
+        rawA := (rawA isString) ifTrue: [ rawA size ] ifFalse: [ 0 ].
+
+        rawP := (each includesKey: #Prompt) ifTrue: [ each at: #Prompt ] ifFalse: [ each at: 'Prompt' ifAbsent: [''] ].
+        rawP := (rawP isString) ifTrue: [ rawP size ] ifFalse: [ 0 ].
+
+        width := (rawA max: 10) min: 300 + 200.
+        height := (rawP max: 10) min: 200 +200.
+
+        "Leer model de forma segura y normalizar a minúsculas"
+        modelRaw := (each includesKey: #Model) ifTrue: [ each at: #Model ] ifFalse: [ each at: 'Model' ifAbsent: [ 'Unknown' ] ].
+        modelStr := (modelRaw isString) ifTrue: [ modelRaw trim asLowercase ] ifFalse: [ (modelRaw asString) trim asLowercase ].
+
+        "Reglas simples y robustas para elegir color por modelo"
+        color := 
+            (modelStr includesSubstring: 'gpt-4') ifTrue: [ Color green ]
+            ifFalse: [
+                ( (modelStr includesSubstring: 'gpt-3.5') or: [ modelStr includesSubstring: '3.5' ]) 
+                    ifTrue: [ Color blue ]
+                    ifFalse: [
+                        (modelStr includesSubstring: 'advanced data') ifTrue: [ Color red ] ifFalse: [ Color veryLightGray ]
+                    ]
+            ].
+
+        box := BlElement new.
+        box size: width @ height.
+        box background: color.
+        box border: (BlBorder paint: Color black width: 5).
+        box margin: (BlInsets all: 12).
+
+        mainContainer addChild: box.
+    ].
+
+    "Zoom/pan"
+    zoomable := BlZoomableElement new
+        size: 1600 @ 900;
+        clipChildren: false;
+        contentElement: mainContainer;
+        yourself.
+
+    zoomable := zoomable asPannableElement.
+
+    ^ aView explicit
+        title: 'Conversations Boxes';
+        priority: 100;
+        stencil: [ zoomable ].
+
+]
+
+{ #category : 'as yet unclassified' }
 ChatGPTAnalyzer >> gtCodeTypeCountFor: aView [
 	<gtView>
 	| typeCounts |
@@ -117,7 +187,7 @@ ChatGPTAnalyzer >> gtCodeTypeCountFor: aView [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ChatGPTAnalyzer >> gtModelCountFor: aView [
 	<gtView>
 	| modelCounts |
@@ -145,7 +215,7 @@ ChatGPTAnalyzer >> gtModelCountFor: aView [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ChatGPTAnalyzer >> gtModelsFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -243,7 +313,7 @@ ChatGPTAnalyzer >> gtModelsFor: aView [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ChatGPTAnalyzer >> gtRepoTokensFor: aView [
 	<gtView>
 	| groupedData |
@@ -282,7 +352,7 @@ ChatGPTAnalyzer >> gtRepoTokensFor: aView [
 			((each at: #TotalPrompts) + (each at: #TotalAnswers)) asString ].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ChatGPTAnalyzer >> gtUniqueRepoLanguageCountFor: aView [
 	<gtView>
 	| groupedData |
@@ -307,26 +377,26 @@ ChatGPTAnalyzer >> gtUniqueRepoLanguageCountFor: aView [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ChatGPTAnalyzer >> jsonData [
 	^ jsonData
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ChatGPTAnalyzer >> jsonData: anObject [
 	jsonData := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ChatGPTAnalyzer >> loadFromFile: fileName [
 	jsonData := self analyzeFromJsonFile: fileName
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ChatGPTAnalyzer >> removeKey: anObject ifAbsent: anObject1 [ 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ChatGPTAnalyzer >> repoData [
 	^ repoData
 ]
