@@ -1,1 +1,1 @@
-Package { #name : 'MSR' }
+Package { #name : #MSR }

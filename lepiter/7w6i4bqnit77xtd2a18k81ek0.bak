@@ -279,7 +279,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-12-03T21:53:59.741408-03:00"
+						"dateAndTimeString" : "2025-12-03T21:54:13.160546-03:00"
 					}
 				},
 				"uid" : {
@@ -289,7 +289,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "#Vista Grafica\n\nSe agrega una vista de cajas  en la que:\n- Cada caja representa una conversacion\n\n- El color es el modelo de lenguaje utilizado\n\t\t[Para GPT 4 -> color verde\n\t\t\tpara GPT 3.5 -> color azul\n\t\t\tpara Advanced data -> rojo\n\t\t\t y para los otros restantes gris]\n\t\t\t \n- El ancho es el tamaño de cada respuesta del modelo (en caracteres)\n\n- El alto es el tamaño del prompt de cada conversacion (en caracteres)"
+				"string" : "#Vista Grafica\n\nSe agrega una vista de cajas llamada \"Conversations Boxes\" en la que:\n- Cada caja representa una conversacion\n\n- El color es el modelo de lenguaje utilizado\n\t\t[Para GPT 4 -> color verde\n\t\t\tpara GPT 3.5 -> color azul\n\t\t\tpara Advanced data -> rojo\n\t\t\t y para los otros restantes gris]\n\t\t\t \n- El ancho es el tamaño de cada respuesta del modelo (en caracteres)\n\n- El alto es el tamaño del prompt de cada conversacion (en caracteres)"
 			}
 		]
 	},

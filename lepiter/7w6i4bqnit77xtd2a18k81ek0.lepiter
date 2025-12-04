@@ -245,14 +245,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-10-24T02:59:25.392-03:00"
+						"dateAndTimeString" : "2025-12-03T22:36:31.568-03:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "ENCo7j/+DQCNXnOaCWtWhQ=="
 				},
-				"code" : "analyzer := ChatGPTAnalyzer new.\r\nanalyzer loadFromFile: 'commit_sharings_sin_html.json'.\r\nanalyzer"
+				"code" : "analyzer := ChatGPTAnalyzer new.\r\nanalyzer loadFromJsonFile: 'commit_sharings_sin_html.json'.\r\nanalyzer inspect."
 			},
 			{
 				"__type" : "textSnippet",
